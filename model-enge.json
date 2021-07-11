@@ -1,0 +1,90 @@
+{
+  "name": "Enge",
+  "description": "Verkehrsituation vor Bahnhof Enge",
+  "streets": [
+    {
+      "name": "s1",
+      "label": "Lavaterstrasse"
+    },
+    {
+      "name": "s2"
+    },
+    {
+      "name": "s3"
+    },
+    {
+      "name": "s4"
+    },
+    {
+      "name": "s5"
+    }
+  ],
+  "crossings": [
+    {
+      "name": "c1",
+      "lines": [
+        {
+          "name": "l_1_5",
+          "in": "s1",
+          "out": "s5",
+          "frequency": 5
+        },
+        {
+          "name": "3->2",
+          "in": "s3",
+          "out": "s2",
+          "frequency": 41
+        },
+        {
+          "name": "3->5",
+          "in": "s3",
+          "out": "s5",
+          "frequency": 55
+        },
+        {
+          "name": "4->2",
+          "in": "s4",
+          "out": "s2",
+          "frequency": true
+        },
+        {
+          "name": "4->1",
+          "in": "s4",
+          "out": "s5",
+          "frequency": true
+        }
+      ],
+      "green_situations": [
+        [
+          "l_1_5",
+          "3->2"
+        ],
+        [
+          "3->5"
+        ],
+        [
+          "4->2"
+        ],
+        [
+          "4->1"
+        ]
+      ]
+    },
+    {
+      "name": "c2",
+      "lines": [
+        {
+          "name": "1->5",
+          "in": "s1",
+          "out": "s5",
+          "frequency": 5
+        }
+      ],
+      "green_situations": [
+        [
+          "1->5"
+        ]
+      ]
+    }
+  ]
+}
