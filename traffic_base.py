@@ -1,9 +1,10 @@
 from random import uniform, randint
-from dotmap import DotMap
 
+from dotmap import DotMap
 
 MAX_VELOCITY = 10
 HIT_BREAK_PERCENTAGE = 0.2
+
 
 def tm_init(tm):
     tm.step = 0
@@ -32,6 +33,10 @@ def tm_init(tm):
             in_set.add(_in)
         crossing.in_list = list(in_set)
         crossing.in_list.sort()
+
+    tm_consolidate_streets_and_cars(tm)
+
+    return tm
 
 
 def tm_create_cars(tm):
@@ -67,6 +72,7 @@ def new_car(tm):
     car.pos = -1
     car.next_street = ""
     tm.car_counter += 1
+    tm.all_cars.append(car)
     return car
 
 
@@ -98,11 +104,11 @@ def next_free_slot(start_pos, slots):
             break
     return d - 1
 
-def tm_get_street(tm,name):
-    if name = tm.nirvana.name:
+
+def tm_get_street(tm, name):
+    if name == tm.nirvana.name:
         return tm.nirvana
     return [street for street in tm.streets if street.name == name][0]
-
 
 
 def tm_next_step_street(tm, street, green_streets):
@@ -112,23 +118,18 @@ def tm_next_step_street(tm, street, green_streets):
             n = []
             if car.next_street in green_streets:
                 n = tm_get_street(tm, car.next_street).slots
-        cancat_slots = street.slots + n
-        d0 = next_free_slot(car.pos, cancat_slots)
-        t = min(car.velocity + 1, d0, MAX_VELOCITY)
-        velocity = max(car.velocity - 1, 0) if uniform(0,1) < HIT_BREAK_PERCENTAGE else t
-        car.velocity = velocity
-        new_pos = car.pos + car.velocity
-        if new_pos < len(street.slots):
-            car.pos = new_pos
-        else:
-            car.street = car.next_street
-            car.pos = new_pos - len(street.slots)
-            car.next_street = ""
-
-
-
-
-
+            cancat_slots = street.slots + n
+            d0 = next_free_slot(car.pos, cancat_slots)
+            t = min(car.velocity + 1, d0, MAX_VELOCITY)
+            velocity = max(car.velocity - 1, 0) if uniform(0, 1) < HIT_BREAK_PERCENTAGE else t
+            car.velocity = velocity
+            new_pos = car.pos + car.velocity
+            if new_pos < len(street.slots):
+                car.pos = new_pos
+            else:
+                car.street = car.next_street
+                car.pos = new_pos - len(street.slots)
+                car.next_street = ""
 
 
 def tm_next_step(tm):
@@ -143,10 +144,6 @@ def tm_next_step(tm):
     tm_consolidate_streets_and_cars(tm)
 
     return tm
-
-
-def tm_next_step_street(tm, street, out_greens):
-
 
 
 def create_new_slots(length):
