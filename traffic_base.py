@@ -2,6 +2,9 @@ from random import uniform, randint
 from dotmap import DotMap
 
 
+MAX_VELOCITY = 10
+HIT_BREAK_PERCENTAGE = 0.2
+
 def tm_init(tm):
     tm.step = 0
     tm.all_cars = []
@@ -81,51 +84,69 @@ def tm_update_green_in_outs(tm):
                 tm.green_in_outs[line_in].append(line.out)
 
 
+def next_free_slot(start_pos, slots):
+    d = 0
+
+    while True:
+        d += 1
+        if start_pos + d < len(slots):
+            if slots[start_pos + d] is None:
+                pass
+            else:
+                break
+        else:
+            break
+    return d - 1
+
+def tm_get_street(tm,name):
+    if name = tm.nirvana.name:
+        return tm.nirvana
+    return [street for street in tm.streets if street.name == name][0]
+
+
+
+def tm_next_step_street(tm, street, green_streets):
+    for slot in street.slots:
+        if slot is not None:
+            car = slot
+            n = []
+            if car.next_street in green_streets:
+                n = tm_get_street(tm, car.next_street).slots
+        cancat_slots = street.slots + n
+        d0 = next_free_slot(car.pos, cancat_slots)
+        t = min(car.velocity + 1, d0, MAX_VELOCITY)
+        velocity = max(car.velocity - 1, 0) if uniform(0,1) < HIT_BREAK_PERCENTAGE else t
+        car.velocity = velocity
+        new_pos = car.pos + car.velocity
+        if new_pos < len(street.slots):
+            car.pos = new_pos
+        else:
+            car.street = car.next_street
+            car.pos = new_pos - len(street.slots)
+            car.next_street = ""
+
+
+
+
+
 
 
 def tm_next_step(tm):
     tm_update_green_in_outs(tm)
 
-    L = len(prev)
-    vmax = 3
-    p = 0.2
-    curr = [None] * L
-    nextstreet = [None] * 100
-    for x in range(L):
+    for street in tm.streets:
+        out_greens = [tm.nirvana.name]
+        if street.name in tm.in_outs:
+            out_greens = tm.green_in_outs[street.name]
+        tm_next_step_street(tm, street, out_greens)
 
-        if prev[x] is not None:
-            car = prev[x]
-            vi = car.v
-            d = 1
-            while prev[(x + d) % L] is None and (x + d) < L:
-                d += 1
-                if (x + d) < L:
-                    pass
-                else:
-                    street = car.get_next_street()
+    tm_consolidate_streets_and_cars(tm)
 
-                    if street in green_streets and nextstreet[(x + d) % L] is None:
-                        # check if empty space for car exists in street
-                        nextstreet.append(car)
-
-
-                    else:
-                        break
-
-            vtemp = min(vi + 1, d - 1, vmax)  # increse speed up to max speed, but don't move further than next car
-
-            v = max(vtemp - 1, 0) if uniform(0,
-                                             1) < p else vtemp  # with probability p hit the brakes, otherwise sustain velocity
-            if (x + v) >= L:
-                print(x + v)
-            curr[(x + v) % L] = car
-            car.v = v
-            car.pos = x
-    return curr
+    return tm
 
 
 def tm_next_step_street(tm, street, out_greens):
-    pass
+
 
 
 def create_new_slots(length):
