@@ -1,12 +1,13 @@
 
 
+
+from traffic_base import Car
+
 from random import uniform, shuffle
 import matplotlib.pyplot as plt
 import numpy as np
 
-sys.path.append("/Users/liviodecapitan/projects/tkinter.py")
 
-from traffic-base import Car
 
 def cars_to_numbers(cars):
     numbers = []
@@ -19,7 +20,7 @@ def cars_to_numbers(cars):
 
 
 L = 500 # number of cells in row
-num_iters = 500 # number of iterations
+num_iters = 500# number of iterations
 density = 0.2 # how many positives
 vmax = 10
 # probability of breaking randomly
@@ -30,8 +31,8 @@ sig_pos = 250
 sig_stat = True
 
 sig_temp = 10
-sig_temp_off = 40
-sig_temp_on = 13
+sig_temp_off = 100
+sig_temp_on = 0
 
 
 cars_num = int(density * L)
@@ -70,7 +71,7 @@ for i in range(num_iters):
         if prev[x] is not None:
             car = prev[x]
             vi = car.v
-            d = 1
+            d = 1 #distance to next Car
             while prev[(x + d) % L] is None:
                 d += 1
             #Lichtsignal

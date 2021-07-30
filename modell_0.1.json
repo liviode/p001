@@ -1,22 +1,22 @@
 {
-  "name": "Enge",
-  "description": "Verkehrsituation vor Bahnhof Enge",
+  "name": "modell_0.1",
+  "description": "starter_model",
   "streets": [
     {
       "name": "s1",
       "label": "Lavaterstrasse",
-      "density":0.1,
+      "density":1,
       "length":10
     },
     {
       "name": "s2",
       "density":0.1,
-      "length":10
+      "length":8
     },
     {
       "name": "s3",
       "density":0.1,
-      "length":10
+      "length":3
     },
     {
       "name": "s4",
@@ -26,30 +26,10 @@
     {
       "name": "s5",
       "density":0.1,
-      "length":10
+      "length":7
     },
     {
       "name": "s6",
-      "density":0.1,
-      "length":10
-    },
-    {
-      "name": "s7",
-      "density":0.1,
-      "length":10
-    },
-    {
-      "name": "s8",
-      "density":0.1,
-      "length":10
-    },
-    {
-      "name": "s9",
-      "density":0.1,
-      "length":10
-    },
-    {
-      "name": "s10",
       "density":0.1,
       "length":10
     }
@@ -77,55 +57,39 @@
           "frequency": 55
         },
         {
-          "name": "s3->s10",
+          "name": "s3->s6",
           "in": "s3",
-          "out": "s10",
+          "out": "s6",
           "frequency": 88
         },
         {
-          "name": "s9->s10",
-          "in": "s9",
-          "out": "s10",
+          "name": "s5->s6",
+          "in": "s5",
+          "out": "s6",
           "frequency": true
         },
         {
-          "name": "s9->s2",
-          "in": "s9",
+          "name": "s5->s2",
+          "in": "s5",
           "out": "s2",
-          "frequency": true
+          "frequency": 80
         }
       ],
       "green_situations": [
         [
-          "1->5",
-          "3->2"
+          "s1->s2","s1->s4","s5->s6"
         ],
         [
-          "3->5"
+          "s1->s2","s5->s6", "s3->s4"
         ],
         [
-          "4->2"
+          "s3->s4", "s3->s6", "s1->s2"
         ],
         [
-          "4->1"
-        ]
-      ]
-    },
-    {
-      "name": "c2",
-      "lines": [
-        {
-          "name": "1->5",
-          "in": "s1",
-          "out": "s5",
-          "frequency": 5
-        }
-      ],
-      "green_situations": [
-        [
-          "1->5"
+          "s5->s6","s5->s2","s3->s4"
         ]
       ]
     }
+
   ]
 }
