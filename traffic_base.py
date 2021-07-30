@@ -1,4 +1,4 @@
-from random import uniform, randint
+from random import uniform, randrange
 
 from dotmap import DotMap
 
@@ -58,7 +58,7 @@ def tm_consolidate_streets_and_cars(tm):
                 street.slots[car.pos] = car
                 if car.next_street == "":
                     if outs is not None:
-                        ri = randint(0, len(outs))
+                        ri = randrange(0, len(outs))
                         car.next_street = outs[ri]
                     else:
                         car.next_street = tm.nirvana.name
