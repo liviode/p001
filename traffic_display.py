@@ -6,9 +6,11 @@ import json
 
 from functools import partial
 
-f = open("model-enge.json")
+f = open("modell_0.1.json")
 tm = DotMap(json.load(f))
 tm_init(tm)
+for street in tm.streets:
+    print(int(street.length))
 
 
 def tm_set_green(crossing, index):
