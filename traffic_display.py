@@ -1,6 +1,6 @@
 from tkinter import *
 from dotmap import DotMap
-from traffic_base import tm_init
+from traffic_base import tm_init, tm_get_street
 from tkinter.messagebox import *
 import json
 
@@ -28,7 +28,7 @@ def start_traffic_display(tm):
     for crossing in tm.crossings:
         crossing.tk_buttons = []
         crossing_frame = Frame(root)
-        crossing_frame.pack(fill="both", expand="yes")
+        crossing_frame.grid()
         l0 = Label(crossing_frame, text=crossing.name, bg="white")
         l0.grid(row=0, column=0)
         fb = Frame(crossing_frame)
@@ -43,7 +43,7 @@ def start_traffic_display(tm):
 
         z = 1
         for in_street in crossing.in_list:
-            street = tm.street_map[in_street]
+            street = tm_get_street(tm, in_street)
             lf = Frame(crossing_frame)
             lf.grid(row=z, column=0, sticky=N + S + W + E)
             z += 1
@@ -55,10 +55,11 @@ def start_traffic_display(tm):
             )
             l0.grid(row=0, column=0, columnspan=street.length, rowspan=1, sticky=N + S + W + E)
             street.tk_labels = []
-            for i in range(street.length):
+            for i, car in enumerate(street.slots):
+                text = "-" if car is None else car.nr
                 l1 = Label(
                     lf,
-                    text=i,
+                    text=text,
                     bg="#9FD996"
                 )
                 street.tk_labels.append(l1)
@@ -75,3 +76,9 @@ def start_traffic_display(tm):
 
 
 start_traffic_display(tm)
+
+def refresh_tk (tm):
+    for street in tm.streets:
+        for i, car in enumerate(street.slots):
+            text = "-" if car is None else car.nr
+            street.tk_labels[i]["text"] = text
