@@ -6,17 +6,17 @@
       "name": "s1",
       "label": "Lavaterstrasse",
       "density":1,
-      "length":10
+      "length":16
     },
     {
       "name": "s2",
       "density":0.1,
-      "length":8
+      "length":23
     },
     {
       "name": "s3",
       "density":0.1,
-      "length":3
+      "length":35
     },
     {
       "name": "s4",

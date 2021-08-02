@@ -1,6 +1,6 @@
 from tkinter import *
 from dotmap import DotMap
-from traffic_base import tm_init, tm_get_street
+from traffic_base import tm_init, tm_get_street, tm_next_step
 from tkinter.messagebox import *
 import json
 
@@ -24,7 +24,7 @@ def start_traffic_display(tm):
     root = Tk()
     root.title("PythonGuides")
     root.geometry("400x300")
-    root.config(bg="#9FD996")
+    root.config(bg="white")
     for crossing in tm.crossings:
         crossing.tk_buttons = []
         crossing_frame = Frame(root)
@@ -71,14 +71,23 @@ def start_traffic_display(tm):
                 lo = Label(lf_out, text=out, bg="red", fg="white")
                 lo.grid(row=i, column=0)
                 i += 1
+    buttons = Frame(root)
+    buttons.grid()
+
+    def _next_fun():
+        tm_next_step(tm)
+        refresh_tk(tm)
+    next = Button(buttons,
+                  text="next_step",
+                  command=_next_fun)
+    next.grid(row=0, column=0)
 
     root.mainloop()
-
-
-start_traffic_display(tm)
 
 def refresh_tk (tm):
     for street in tm.streets:
         for i, car in enumerate(street.slots):
             text = "-" if car is None else car.nr
             street.tk_labels[i]["text"] = text
+
+start_traffic_display(tm)
