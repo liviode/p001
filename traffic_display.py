@@ -1,10 +1,11 @@
-from tkinter import *
-from dotmap import DotMap
-from traffic_base import tm_init, tm_get_street, tm_next_step
-from tkinter.messagebox import *
 import json
-
 from functools import partial
+from tkinter import *
+from traffic_display_components import TkCar
+
+from dotmap import DotMap
+
+from traffic_base import tm_init, tm_get_street, tm_next_step
 
 f = open("modell_0.1.json")
 tm = DotMap(json.load(f))
@@ -56,14 +57,9 @@ def start_traffic_display(tm):
             l0.grid(row=0, column=0, columnspan=street.length, rowspan=1, sticky=N + S + W + E)
             street.tk_labels = []
             for i, car in enumerate(street.slots):
-                text = "-" if car is None else car.nr
-                l1 = Label(
-                    lf,
-                    text=text,
-                    bg="#9FD996"
-                )
-                street.tk_labels.append(l1)
-                l1.grid(row=1, column=i)
+                tk_car = TkCar(lf)
+                street.tk_labels.append(tk_car)
+                tk_car.grid(row=1, column=i)
             lf_out = Frame(lf)
             lf_out.grid(row=0, column=street.length + 1, rowspan=2, )
             i = 0
@@ -77,6 +73,7 @@ def start_traffic_display(tm):
     def _next_fun():
         tm_next_step(tm)
         refresh_tk(tm)
+
     next = Button(buttons,
                   text="next_step",
                   command=_next_fun)
@@ -84,10 +81,11 @@ def start_traffic_display(tm):
 
     root.mainloop()
 
-def refresh_tk (tm):
+
+def refresh_tk(tm):
     for street in tm.streets:
         for i, car in enumerate(street.slots):
-            text = "-" if car is None else car.nr
-            street.tk_labels[i]["text"] = text
+            street.tk_labels[i].set_car(car)
+
 
 start_traffic_display(tm)
