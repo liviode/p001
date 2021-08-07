@@ -1,0 +1,59 @@
+{
+  "name": "modell_0.1",
+  "description": "starter_model",
+  "streets": [
+    {
+      "name": "s1",
+      "density": 1,
+      "length": 10
+    },
+    {
+      "name": "s2",
+      "density": 0,
+      "length": 10
+    },
+    {
+      "name": "s3",
+      "density": 0.2,
+      "length": 10
+    },
+    {
+      "name": "s4",
+      "density": 0,
+      "length": 10
+    }
+  ],
+  "crossings": [
+    {
+      "name": "c1",
+      "lines": [
+        {
+          "name": "s1->s2",
+          "in": "s1",
+          "out": "s2",
+          "frequency": 5
+        },
+        {
+          "name": "s1->s4",
+          "in": "s1",
+          "out": "s4"
+        },
+        {
+          "name": "s3->s4",
+          "in": "s3",
+          "out": "s4"
+        }
+      ],
+      "green_situations": [
+        [
+          "s1->s2",
+          "s1->s4"
+        ],
+        [
+          "s1->s2",
+          "s3->s4"
+        ]
+      ]
+    }
+  ]
+}

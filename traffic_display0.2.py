@@ -22,14 +22,14 @@ def start_traffic_display(tm):
         )
         l0.grid(row=0, column=0, columnspan=street.length, ipady=0)
 
-        street.tk_labels = []
+        street.tk_slots = []
         for i in range(street.length):
             l1 = Label(
                 lf,
                 text=i,
                 bg="#9FD996"
             )
-            street.tk_labels.append(l1)
+            street.tk_slots.append(l1)
             l1.grid(row=1, column=i)
 
     root.mainloop()
