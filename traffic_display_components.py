@@ -66,18 +66,10 @@ class ToolTip:
         self.widget.bind('<Leave>', on_leave)
 
 
+
+
+
+
 if __name__ == '__main__':
     print('hello main')
-    root = tk.Tk()
-    tkcar = TkSlot(root)
-    tkcar.pack()
-
-
-    def car():
-        pass
-
-
-    car.nr = 25
-    car.velocity = 2
-    tkcar.set_car(car)
-    root.mainloop()
+    
