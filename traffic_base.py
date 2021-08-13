@@ -28,9 +28,9 @@ def tm_init(tm):
         in_set = set()
         for line in crossing.lines:
             _in = line["in"]
+            in_set.add(_in)
             tm.in_outs[_in] = [] if _in not in tm.in_outs else tm.in_outs[_in]
             tm.in_outs[_in].append(line.out)
-            in_set.add(_in)
         crossing.in_list = list(in_set)
         crossing.in_list.sort()
 

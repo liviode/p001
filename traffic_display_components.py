@@ -6,8 +6,8 @@ class TkSlot(tk.Frame):
     def __init__(self, tk_parent):
         tk.Frame.__init__(self, tk_parent)
 
-        self.car = tk.Label(self, text='-', anchor="e", width=1,font=("Courier", 12))
-        self.velocity = tk.Label(self, text='-', anchor="w", width=1,font=("Courier", 12))
+        self.car = tk.Label(self, text='-', anchor="e", width=1, font=("Courier", 12))
+        self.velocity = tk.Label(self, text='-', anchor="w", width=1, font=("Courier", 12))
 
         self.car.pack(ipadx=2, ipady=2, expand=True, fill='both', side='left')
         self.velocity.pack(ipadx=2, ipady=2, fill='both')
@@ -66,10 +66,5 @@ class ToolTip:
         self.widget.bind('<Leave>', on_leave)
 
 
-
-
-
-
 if __name__ == '__main__':
     print('hello main')
-    

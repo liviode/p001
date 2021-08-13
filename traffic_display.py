@@ -1,6 +1,7 @@
 import json
 from functools import partial
 from tkinter import *
+from tkinter import ttk
 
 from dotmap import DotMap
 
@@ -24,52 +25,67 @@ def tm_set_green(crossing, index):
 def start_traffic_display(tm):
     root = Tk()
     root.title("PythonGuides")
-    root.geometry("400x300")
+    root.geometry("800x300")
     root.config(bg="white")
     for crossing in tm.crossings:
+
+        street_set = set()
+        for line in crossing.lines:
+            street_set.add(line['in'])
+            street_set.add(line['out'])
+
         crossing.tk_buttons = []
         crossing_frame = Frame(root, bg='white')
-        crossing_frame.grid()
+        crossing_frame.grid(padx=50, pady=10)
         tk_crossing_label = Label(crossing_frame, text=crossing.name, font=("Courier", 22), bg='white')
-        tk_crossing_label.grid(row=0, column=0, padx=4, pady=4, sticky=N + W)
-        tk_crossing_controls = Frame(crossing_frame)
-        tk_crossing_controls.grid(row=1, column=1, rowspan=len(crossing.in_list), sticky=N + S + W + E)
-        index = 0
-        for situation in crossing.green_situations:
-            b = Button(tk_crossing_controls, text="\n".join(situation), highlightbackground='gray',
-                       command=partial(tm_set_green, crossing, index))
-            b.pack()
-            crossing.tk_buttons.append(b)
-            index += 1
+        tk_crossing_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
+        tk_controls_frame = Frame(crossing_frame)
+        tk_controls_frame.grid(row=1, column=2, rowspan=len(street_set)*2, sticky=N + S + W + E)
 
-        z = 1
+        for i, situation in enumerate(crossing.green_situations):
+            b = Button(tk_controls_frame, text="\n".join(situation), highlightbackground='gray',
+                       command=partial(tm_set_green, crossing, i))
+            b.grid(column=0, row=i, padx=10, pady=10)
+            crossing.tk_buttons.append(b)
+
+        row = 1
         street_set = set()
         for in_street in crossing.in_list:
             street_set.add(in_street)
             street = tm_get_street(tm, in_street)
-            tk_street_parent = Frame(crossing_frame)
-            street.tk_street = TkStreet(tk_street_parent, street)
-            street.tk_street.grid()
-            tk_street_parent.grid(row=z, column=0, sticky=N + S + W + E)
+            tk_street_frame = Frame(crossing_frame)
+            tk_street_frame.grid(row=row, column=0, pady=10, sticky=N + S + W + E)
+            sep = ttk.Separator(crossing_frame, orient=VERTICAL)
+            sep.grid(row=row + 1, column=0, sticky=N + S + W + E)
 
-            lf_out = Frame(tk_street_parent)
-            lf_out.grid(row=0, column=street.length + 1, rowspan=2, )
+            street.tk_street = TkStreet(tk_street_frame, street)
+            street.tk_street.grid()
+
+            outs_frame = Frame(crossing_frame)
+            outs_frame.grid(row=row, column=1, padx=10, pady=10)
+            sep = ttk.Separator(crossing_frame, orient=VERTICAL)
+            sep.grid(row=row + 1, column=1, sticky=N + S + W + E)
+
             i = 0
             for out in tm.in_outs[street.name]:
-                lo = Label(lf_out, text=out, bg="red", fg="white")
-                lo.grid(row=i, column=0)
+                lo = Label(outs_frame, text=out, bg="red", fg="white")
+                lo.grid(row=0, column=i, padx=10, pady=10)
                 i += 1
-            z += 1
+            row += 2
 
         for line in crossing.lines:
             if line.out not in street_set:
                 street_set.add(line.out)
                 street = tm_get_street(tm, line.out)
-                tk_street_parent = Frame(crossing_frame)
-                street.tk_street = TkStreet(tk_street_parent, street)
+                tk_street_frame = Frame(crossing_frame)
+                tk_street_frame.grid(row=row, column=0, pady=10, sticky=N + S + W + E)
+                sep = ttk.Separator(crossing_frame, orient=VERTICAL)
+                sep.grid(row=row+1, column=0, columnspan=2, sticky=N + S + W + E)
+
+                street.tk_street = TkStreet(tk_street_frame, street)
                 street.tk_street.grid()
-                tk_street_parent.grid(row=z, column=0, sticky=N + S + W + E)
-                z += 1
+
+                row += 2
 
     buttons = Frame(root)
     buttons.grid()
