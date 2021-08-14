@@ -11,9 +11,6 @@ from traffic_display_components import TkStreet
 f = open("model_01.json")
 tm = DotMap(json.load(f))
 tm_init(tm)
-for street in tm.streets:
-    print(int(street.length))
-
 
 def tm_set_green(crossing, index):
     crossing.green_situations_index = index
@@ -29,6 +26,7 @@ def start_traffic_display(tm):
     root.config(bg="white")
     for crossing in tm.crossings:
 
+        crossing.tk_outs = DotMap()
         street_set = set()
         for line in crossing.lines:
             street_set.add(line['in'])
@@ -40,7 +38,7 @@ def start_traffic_display(tm):
         tk_crossing_label = Label(crossing_frame, text=crossing.name, font=("Courier", 22), bg='white')
         tk_crossing_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
         tk_controls_frame = Frame(crossing_frame)
-        tk_controls_frame.grid(row=1, column=2, rowspan=len(street_set)*2, sticky=N + S + W + E)
+        tk_controls_frame.grid(row=1, column=2, rowspan=len(street_set) * 2, sticky=N + S + W + E)
 
         for i, situation in enumerate(crossing.green_situations):
             b = Button(tk_controls_frame, text="\n".join(situation), highlightbackground='gray',
@@ -66,11 +64,12 @@ def start_traffic_display(tm):
             sep = ttk.Separator(crossing_frame, orient=VERTICAL)
             sep.grid(row=row + 1, column=1, sticky=N + S + W + E)
 
-            i = 0
-            for out in tm.in_outs[street.name]:
-                lo = Label(outs_frame, text=out, bg="red", fg="white")
-                lo.grid(row=0, column=i, padx=10, pady=10)
-                i += 1
+
+            for i, out in enumerate(tm.in_outs[street.name]):
+                tk_out = Label(outs_frame, text=out, bg="gray", fg="white")
+                tk_out.grid(row=0, column=i, padx=10, pady=10)
+                crossing.tk_outs[out] = tk_out
+
             row += 2
 
         for line in crossing.lines:
@@ -80,7 +79,7 @@ def start_traffic_display(tm):
                 tk_street_frame = Frame(crossing_frame)
                 tk_street_frame.grid(row=row, column=0, pady=10, sticky=N + S + W + E)
                 sep = ttk.Separator(crossing_frame, orient=VERTICAL)
-                sep.grid(row=row+1, column=0, columnspan=2, sticky=N + S + W + E)
+                sep.grid(row=row + 1, column=0, columnspan=2, sticky=N + S + W + E)
 
                 street.tk_street = TkStreet(tk_street_frame, street)
                 street.tk_street.grid()
@@ -108,6 +107,15 @@ def refresh_tk(tm):
     for street in tm.streets:
         for i, car in enumerate(street.slots):
             street.tk_slots[i].set_car(car)
+    for crossing in tm.crossings:
+        green_situation = crossing.green_situations[
+            crossing.green_situations_index] if not crossing.green_situations_index == -1 else None
+        for line in crossing.lines:
+            tk_out = crossing.tk_outs[line.out]
+            if green_situation is not None and line.name in green_situation:
+                tk_out.config(bg='green')
+            else:
+                tk_out.config(bg='red')
 
 
 start_traffic_display(tm)
